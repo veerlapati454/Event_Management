@@ -1,0 +1,611 @@
+/* ================================================
+   Login.css — Event Management System
+   Theme: Deep Navy × Electric Violet (matches home)
+   ================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+/* ── TOKENS (mirrors home.css) ──────────────────── */
+:root {
+  --violet:        #7C3AED;
+  --violet-light:  #A78BFA;
+  --violet-dim:    rgba(124, 58, 237, 0.12);
+  --violet-border: rgba(124, 58, 237, 0.28);
+
+  --electric:      #06B6D4;
+  --electric-dim:  rgba(6, 182, 212, 0.1);
+
+  --navy-bg:      #07080F;
+  --navy-surface: #0D0F1C;
+  --navy-card:    #111427;
+  --navy-border:  rgba(255, 255, 255, 0.06);
+  --navy-border-hover: rgba(255, 255, 255, 0.12);
+
+  --text-primary:   #EEF0FF;
+  --text-secondary: #8B8FA8;
+  --text-muted:     #4B4F68;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 100px;
+
+  --tr: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --tr-spring: 0.5s cubic-bezier(0.34, 1.3, 0.64, 1);
+
+  --font: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+}
+
+/* ── PAGE LAYOUT ────────────────────────────────── */
+.login-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  font-family: var(--font);
+  background: var(--navy-bg);
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────────
+   LEFT BANNER
+───────────────────────────────────────────────── */
+/* ── LEFT BANNER ──────────────────────────────── */
+.login-banner {
+  position: relative;
+  background: var(--navy-bg);
+  display: flex;
+  align-items: center;        /* ← was flex-end */
+  justify-content: center;    /* ← add this */
+  padding: clamp(40px, 6vw, 72px);
+  overflow: hidden;
+}
+
+/* Geometric grid */
+.login-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(124, 58, 237, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, 0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* Animated scan line */
+.login-banner::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(124, 58, 237, 0.38),
+    rgba(6, 182, 212, 0.3),
+    transparent
+  );
+  animation: scan 7s linear infinite;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+@keyframes scan {
+  0%   { top: 0%; }
+  100% { top: 100%; }
+}
+
+/* Violet glow orb — top-left */
+.banner-overlay {
+  position: absolute;
+  top: -80px;
+  left: -80px;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(124, 58, 237, 0.2) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+  animation: glow-breathe 5s ease-in-out infinite;
+}
+
+/* Cyan glow orb — bottom-right */
+.banner-overlay::after {
+  content: '';
+  position: absolute;
+  bottom: -280px;
+  right: -280px;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(6, 182, 212, 0.14) 0%,
+    transparent 65%
+  );
+  animation: glow-breathe 5s ease-in-out infinite 2.2s;
+  pointer-events: none;
+}
+
+@keyframes glow-breathe {
+  0%, 100% { transform: scale(1);    opacity: 0.75; }
+  50%       { transform: scale(1.14); opacity: 1;    }
+}
+
+/* Decorative rings */
+.banner-content::before {
+  content: '';
+  position: absolute;
+  top: 24px;
+  right: -80px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  border: 1px solid rgba(124, 58, 237, 0.15);
+  pointer-events: none;
+}
+
+.banner-content::after {
+  content: '';
+  position: absolute;
+  top: 64px;
+  right: -40px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  border: 1px solid rgba(124, 58, 237, 0.08);
+  pointer-events: none;
+}
+
+/* Banner content */
+.banner-content {
+  position: relative;
+  z-index: 2;
+  animation: rise 0.8s var(--tr-spring) both;
+  text-align: center;         /* ← optional, for centered text */
+}
+
+.banner-content p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 320px;
+  margin: 0 auto 36px;        /* ← auto left/right to center the block */
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Eyebrow pill — "EVENT MANAGEMENT SYSTEM" */
+.banner-content > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--violet-light);
+  background: var(--violet-dim);
+  border: 1px solid var(--violet-border);
+  border-radius: var(--radius-pill);
+  padding: 5px 15px;
+  margin-bottom: 28px;
+}
+
+/* Animated dot inside eyebrow */
+.banner-content > span:first-child::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--electric);
+  animation: blink 1.8s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}
+
+/* Headline */
+.banner-content h1 {
+  font-size: clamp(30px, 3.5vw, 48px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+}
+
+/* Gradient italic — "Celebrate." */
+.banner-content h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--violet-light) 0%, var(--electric) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Description paragraph */
+
+
+/* ─────────────────────────────────────────────────
+   RIGHT — LOGIN CONTAINER
+───────────────────────────────────────────────── */
+.login-container {
+  background: var(--navy-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(32px, 5vw, 60px) clamp(24px, 4vw, 48px);
+  border-left: 1px solid rgba(124, 58, 237, 0.1);
+  position: relative;
+}
+
+/* Subtle top-right ambient glow */
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* ── CARD ───────────────────────────────────────── */
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  animation: rise 0.7s 0.15s var(--tr-spring) both;
+}
+
+/* ── BACK LINK ──────────────────────────────────── */
+.back-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-bottom: 32px;
+  transition: color var(--tr);
+  letter-spacing: 0.02em;
+}
+
+.back-home svg,
+.back-home > * {
+  font-size: 14px;
+}
+
+.back-home:hover {
+  color: var(--violet-light);
+}
+
+/* ── HEADING ────────────────────────────────────── */
+.login-card h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.4px;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+}
+
+/* ── ROLE SELECTOR ──────────────────────────────── */
+.role-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: var(--navy-card);
+  border: 1px solid var(--navy-border);
+  border-radius: var(--radius-lg);
+  padding: 5px;
+  margin-bottom: 24px;
+}
+
+.role-btn {
+  padding: 10px 0;
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background var(--tr), color var(--tr), box-shadow var(--tr);
+  background: transparent;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.role-btn.active {
+  background: var(--violet);
+  color: #ffffff;
+  box-shadow: 0 2px 14px rgba(124, 58, 237, 0.35);
+}
+
+.role-btn:not(.active):hover {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ── INPUT GROUPS ───────────────────────────────── */
+.input-group {
+  margin-bottom: 18px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.input-group input {
+  width: 100%;
+  background: var(--navy-card);
+  border: 1px solid var(--navy-border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--text-primary);
+  font-family: var(--font);
+  transition: border-color var(--tr), box-shadow var(--tr);
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.input-group input::placeholder {
+  color: var(--text-muted);
+}
+
+.input-group input:hover {
+  border-color: var(--navy-border-hover);
+}
+
+.input-group input:focus {
+  border-color: rgba(124, 58, 237, 0.55);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+/* ── OPTIONS ROW ────────────────────────────────── */
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.options label input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--violet);
+  cursor: pointer;
+}
+
+.options a {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--violet-light);
+  text-decoration: none;
+  transition: color var(--tr);
+}
+
+.options a:hover {
+  color: var(--electric);
+}
+
+/* ── LOGIN BUTTON ───────────────────────────────── */
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--violet);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: background var(--tr), transform var(--tr), box-shadow var(--tr);
+  margin-bottom: 20px;
+  letter-spacing: 0.03em;
+}
+
+/* Sweep shine */
+.login-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -110%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 100%
+  );
+  animation: btn-shine 3.5s 1.2s ease-in-out infinite;
+}
+
+@keyframes btn-shine {
+  0%        { left: -110%; }
+  35%, 100% { left: 110%;  }
+}
+
+/* Bottom glow */
+.login-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 20%;
+  right: 20%;
+  height: 18px;
+  background: rgba(124, 58, 237, 0.4);
+  border-radius: 50%;
+  filter: blur(10px);
+  opacity: 0;
+  transition: opacity var(--tr);
+  pointer-events: none;
+}
+
+.login-btn:hover {
+  background: #6D28D9;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.38);
+}
+
+.login-btn:hover::after {
+  opacity: 1;
+}
+
+.login-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* ── DIVIDER ────────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--navy-border);
+}
+
+.divider span {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+
+/* ── SIGNUP BUTTON ──────────────────────────────── */
+.signup-btn {
+  display: block;
+  width: 100%;
+  padding: 13px;
+  background: transparent;
+  color: var(--violet-light);
+  border: 1px solid var(--violet-border);
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: background var(--tr), border-color var(--tr), color var(--tr);
+}
+
+.signup-btn:hover {
+  background: var(--violet-dim);
+  border-color: rgba(124, 58, 237, 0.45);
+  color: #C4B5FD;
+}
+
+.signup-btn:active {
+  transform: scale(0.99);
+}
+
+/* ── RESPONSIVE ─────────────────────────────────── */
+@media (max-width: 900px) {
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .login-banner {
+    min-height: 260px;
+    padding: 40px 32px;
+    align-items: center;
+  }
+
+  .banner-content h1 {
+    font-size: 28px;
+  }
+
+  .banner-content p {
+    display: none;
+  }
+
+  .login-container {
+    border-left: none;
+    border-top: 1px solid rgba(124, 58, 237, 0.1);
+    padding: 40px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-banner {
+    min-height: 200px;
+    padding: 32px 24px;
+  }
+
+  .login-card {
+    max-width: 100%;
+  }
+
+  .login-card h2 {
+    font-size: 20px;
+  }
+}
+
+/* ── REDUCED MOTION ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .banner-content,
+  .login-card,
+  .login-btn::before,
+  .banner-overlay,
+  .banner-overlay::after {
+    animation: none !important;
+  }
+
+  .login-banner::after {
+    display: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}

@@ -1,0 +1,392 @@
+/* ================================================
+   NotFound.css — Advanced Animated 404 Page
+   Theme: Deep Space · Violet × Cyan Accents
+   ================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap');
+
+/* ── SECTION WRAPPER ────────────────────────────── */
+.notfound {
+  min-height: 100vh;
+  background: #060610;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── GRID BACKGROUND ────────────────────────────── */
+.notfound::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(124, 58, 237, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, 0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── SCAN LINE ──────────────────────────────────── */
+.notfound::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(124, 58, 237, 0.4),
+    rgba(6, 182, 212, 0.4),
+    transparent
+  );
+  animation: scan 6s linear infinite;
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes scan {
+  0%   { top: 0%; }
+  100% { top: 100%; }
+}
+
+/* ── CONTENT CARD ───────────────────────────────── */
+.notfound-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: 56px 48px;
+  animation: content-rise 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes content-rise {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── AMBIENT GLOW ───────────────────────────────── */
+.notfound-content::before {
+  content: '';
+  position: absolute;
+  inset: -160px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(124, 58, 237, 0.16) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+  animation: glow-breathe 4s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes glow-breathe {
+  0%, 100% { transform: scale(1);   opacity: 0.7; }
+  50%       { transform: scale(1.2); opacity: 1;   }
+}
+
+/* ── EYEBROW BADGE ──────────────────────────────── */
+.notfound-content::after {
+  content: '● Error 404';
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #A78BFA;
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 100px;
+  padding: 5px 16px;
+  width: fit-content;
+  margin: 0 auto 20px;
+  animation: badge-pop 0.5s 0.15s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes badge-pop {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1);   }
+}
+
+/* ── 404 HEADLINE ───────────────────────────────── */
+.notfound-content h1 {
+  font-size: clamp(90px, 18vw, 140px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -5px;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(167, 139, 250, 0.45);
+  text-stroke: 1.5px rgba(167, 139, 250, 0.45);
+  margin: 0 0 4px;
+  position: relative;
+
+  /* Gradient fill using background-clip */
+  background: linear-gradient(135deg, #A78BFA 0%, #06B6D4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0.65;
+
+  /* Entrance animation */
+  animation:
+    headline-in 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+    glitch-404 7s steps(1) 1.2s infinite;
+}
+
+@keyframes headline-in {
+  from { opacity: 0; transform: scale(0.85) translateY(-20px); }
+  to   { opacity: 0.65; transform: scale(1) translateY(0); }
+}
+
+/* Periodic glitch on the 404 number */
+@keyframes glitch-404 {
+  0%, 91%, 100% {
+    text-shadow: none;
+    transform: none;
+    filter: none;
+  }
+  92% {
+    text-shadow: -4px 0 #7C3AED, 4px 0 #06B6D4;
+    transform: skewX(-3deg) translateX(2px);
+  }
+  93% {
+    text-shadow: 4px 0 #7C3AED, -4px 0 #06B6D4;
+    transform: skewX(3deg) translateX(-2px);
+  }
+  94% {
+    text-shadow: none;
+    transform: none;
+  }
+  95% {
+    text-shadow: -2px 0 #7C3AED, 2px 0 #06B6D4;
+    transform: skewX(-1deg);
+    filter: brightness(1.4);
+  }
+  96% {
+    text-shadow: none;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* ── DIVIDER LINE ───────────────────────────────── */
+.notfound-content h1 + * {
+  position: relative;
+}
+
+.notfound-content h1 + *::before {
+  content: '';
+  display: block;
+  width: 52px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #7C3AED, #06B6D4, transparent);
+  margin: 18px auto 22px;
+  animation: divider-grow 0.7s 0.5s both;
+}
+
+@keyframes divider-grow {
+  from { width: 0; opacity: 0; }
+  to   { width: 52px; opacity: 1; }
+}
+
+/* ── SUBHEADING ─────────────────────────────────── */
+.notfound-content h2 {
+  font-size: clamp(20px, 3.5vw, 26px);
+  font-weight: 600;
+  color: #EEF0FF;
+  margin: 0 0 14px;
+  letter-spacing: -0.3px;
+  animation: content-rise 0.6s 0.35s both;
+}
+
+/* ── BODY TEXT ──────────────────────────────────── */
+.notfound-content p {
+  font-size: 15px;
+  color: #8B8FA8;
+  line-height: 1.7;
+  max-width: 360px;
+  margin: 0 auto 36px;
+  animation: content-rise 0.6s 0.5s both;
+}
+
+/* ── HOME BUTTON ────────────────────────────────── */
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 30px;
+  background: #7C3AED;
+  color: #ffffff;
+  border: none;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+  animation: content-rise 0.6s 0.65s both;
+}
+
+/* Animated shine sweep */
+.home-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -110%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.16) 50%,
+    transparent 100%
+  );
+  animation: btn-shine 3.5s 1.8s ease-in-out infinite;
+}
+
+@keyframes btn-shine {
+  0%       { left: -110%; }
+  35%, 100% { left: 110%; }
+}
+
+/* Subtle bottom glow */
+.home-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 20%;
+  right: 20%;
+  height: 16px;
+  background: rgba(124, 58, 237, 0.4);
+  border-radius: 50%;
+  filter: blur(8px);
+  transition: opacity 0.22s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.home-btn:hover {
+  background: #6D28D9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(124, 58, 237, 0.35);
+}
+
+.home-btn:hover::after {
+  opacity: 1;
+}
+
+.home-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* ── FLOATING RINGS (pseudo, JS-free fallback) ─── */
+/* Add three <span class="nf-ring"> inside .notfound for rings */
+.nf-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(124, 58, 237, 0.12);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+  animation: ring-expand 4.5s ease-out infinite;
+  z-index: 1;
+}
+
+.nf-ring:nth-child(2) { animation-delay: 1.5s; }
+.nf-ring:nth-child(3) { animation-delay: 3s; }
+
+@keyframes ring-expand {
+  0%   { width: 80px;  height: 80px;  opacity: 0.6; }
+  100% { width: 700px; height: 700px; opacity: 0;   }
+}
+
+/* ── FLOATING PARTICLES (JS-generated) ─────────── */
+/* Inject <span class="nf-particle"> via JS for floating dots */
+.nf-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #7C3AED;
+  pointer-events: none;
+  opacity: 0;
+  animation: particle-float var(--fd, 6s) linear infinite var(--fdelay, 0s);
+  z-index: 1;
+}
+
+.nf-particle:nth-child(odd) {
+  background: #06B6D4;
+}
+
+@keyframes particle-float {
+  0%   { transform: translateY(0)    translateX(0);         opacity: 0;   }
+  10%  {                                                      opacity: 0.8; }
+  90%  {                                                      opacity: 0.3; }
+  100% { transform: translateY(-320px) translateX(var(--fx, 60px)); opacity: 0; }
+}
+
+/* ── STAR FIELD (JS-generated) ──────────────────── */
+.nf-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 50%;
+  animation: star-twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(1);   }
+  50%       { opacity: 1;    transform: scale(1.6); }
+}
+
+/* ── RESPONSIVE ─────────────────────────────────── */
+@media (max-width: 480px) {
+  .notfound-content {
+    padding: 40px 24px;
+  }
+
+  .notfound-content p {
+    font-size: 14px;
+  }
+
+  .home-btn {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
+
+/* ── REDUCED MOTION ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .notfound-content h1,
+  .notfound-content h2,
+  .notfound-content p,
+  .home-btn,
+  .nf-ring,
+  .nf-particle,
+  .nf-star,
+  .notfound-content,
+  .notfound-content::before,
+  .notfound-content::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .notfound-content h1 {
+    opacity: 0.65;
+  }
+
+  .notfound::after {
+    display: none;
+  }
+}
