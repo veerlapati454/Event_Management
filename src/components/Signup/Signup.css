@@ -615,6 +615,30 @@
     padding: 40px 24px;
   }
 }
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 45px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #777;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.password-toggle:hover {
+  color: #111;
+}
 
 @media (max-width: 480px) {
   .signup-banner {

@@ -2,14 +2,25 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 import { HiArrowLeft } from "react-icons/hi";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Login() {
   const navigate = useNavigate();
 
   const [role, setRole] = useState("user");
+  const [email, setEmail] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Gmail validation
+    const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+
+    if (!gmailRegex.test(email)) {
+      alert("Please enter a valid Gmail address.");
+      return;
+    }
 
     if (role === "admin") {
       navigate("/admin-dashboard");
@@ -20,7 +31,6 @@ function Login() {
 
   return (
     <div className="login-page">
-
       {/* Left Side */}
       <div className="login-banner">
         <div className="banner-overlay"></div>
@@ -43,15 +53,12 @@ function Login() {
 
       {/* Right Side */}
       <div className="login-container">
-
-        <form
-          className="login-card"
-          onSubmit={handleSubmit}
-        >
+        <form className="login-card" onSubmit={handleSubmit}>
           <Link to="/" className="back-home">
-  <HiArrowLeft />
-  Back to Home
-</Link>
+            <HiArrowLeft />
+            Back to Home
+          </Link>
+
           <h2>Welcome Back</h2>
 
           <p className="subtitle">
@@ -59,9 +66,7 @@ function Login() {
           </p>
 
           {/* Role Selection */}
-
           <div className="role-selector">
-
             <button
               type="button"
               className={
@@ -85,31 +90,50 @@ function Login() {
             >
               Admin
             </button>
-
           </div>
 
+          {/* Email */}
           <div className="input-group">
             <label>Email Address</label>
 
             <input
               type="email"
-              placeholder="Enter email"
+              placeholder="Enter Gmail Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+              title="Only Gmail addresses are allowed"
               required
             />
           </div>
 
+          {/* Password */}
           <div className="input-group">
             <label>Password</label>
 
-            <input
-              type="password"
-              placeholder="Enter password"
-              required
-            />
+            <div className="password-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                required
+              />
+
+              <span
+                className="password-toggle"
+                onClick={() =>
+                  setShowPassword(!showPassword)
+                }
+              >
+                {showPassword ? (
+                  <FaEyeSlash />
+                ) : (
+                  <FaEye />
+                )}
+              </span>
+            </div>
           </div>
 
           <div className="options">
-
             <label>
               <input type="checkbox" />
               Remember Me
@@ -118,7 +142,6 @@ function Login() {
             <Link to="/">
               Forgot Password?
             </Link>
-
           </div>
 
           <button
@@ -138,11 +161,8 @@ function Login() {
           >
             Create New Account
           </Link>
-
         </form>
-
       </div>
-
     </div>
   );
 }

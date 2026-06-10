@@ -8,11 +8,12 @@ import {
   FaMapMarkerAlt
 } from "react-icons/fa";
 
-import { Link } from "react-router-dom";
+import { Link , useNavigate} from "react-router-dom";
 import "./Footer.css";
 import logo from "../../assets/stackly_logo.webp";
 
 function Footer() {
+  const navigate=useNavigate()
   return (
     <footer className="footer">
       <div className="footer-container">
@@ -20,7 +21,7 @@ function Footer() {
         {/* Company Info */}
         <div className="footer-section">
           <div className="footer-logo">
-            <img src={logo} alt="Stackly Logo" />
+            <img src={logo} alt="Stackly Logo" onClick={()=>navigate("/") }style={{ cursor:"pointer"}}/>
           </div>
 
           <p>

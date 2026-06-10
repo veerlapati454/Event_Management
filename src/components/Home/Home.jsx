@@ -7,6 +7,13 @@ import s3 from "../../assets/s3.webp";
 import s4 from "../../assets/s4.webp";
 import s5 from "../../assets/s5.webp";
 import s6 from "../../assets/s6.webp";
+import A1 from "../../assets/A1.webp";
+import A2 from "../../assets/A2.webp";
+import A3 from "../../assets/A3.webp";
+import A4 from "../../assets/A4.webp";
+import A5 from "../../assets/A5.webp";
+import A6 from "../../assets/A6.webp";
+import s14 from "../../assets/s14.webp";
 
 function Home() {
   const navigate = useNavigate();
@@ -17,37 +24,43 @@ function Home() {
 
   const services = [
     {
-      icon: "💍",
+      // Replace s1 with your dedicated wedding image e.g. import svcWedding from "../../assets/svc-wedding.webp"
+      image: A1,
       title: "Wedding Planning",
       desc: "Bespoke ceremonies crafted around your story — from intimate gatherings to grand celebrations.",
       tag: "Most Requested"
     },
     {
-      icon: "🏛️",
+      // Replace s2 with your dedicated corporate image e.g. import svcCorporate from "../../assets/svc-corporate.webp"
+      image: A2,
       title: "Corporate Events",
       desc: "High-impact conferences, product launches, and executive summits that leave lasting impressions.",
       tag: null
     },
     {
-      icon: "🎂",
+      // Replace s3 with your dedicated birthday image e.g. import svcBirthday from "../../assets/svc-birthday.webp"
+      image: A3,
       title: "Birthday Celebrations",
       desc: "Themed, stylish, and tailored experiences for milestone birthdays at any scale.",
       tag: null
     },
     {
-      icon: "🎶",
+      // Replace s4 with your dedicated festival image e.g. import svcFestival from "../../assets/svc-festival.webp"
+      image: A4,
       title: "Music Festivals",
       desc: "End-to-end production for concerts and outdoor festivals — logistics, staging, and crowd management.",
       tag: null
     },
     {
-      icon: "🖼️",
+      // Replace s5 with your dedicated exhibitions image e.g. import svcExhibitions from "../../assets/svc-exhibitions.webp"
+      image: A5,
       title: "Exhibitions",
       desc: "Curated showcase experiences for brands, artists, and innovators to engage their audiences.",
       tag: null
     },
     {
-      icon: "🥂",
+      // Replace s6 with your dedicated private parties image e.g. import svcParties from "../../assets/svc-parties.webp"
+      image: A6,
       title: "Private Parties",
       desc: "Exclusive, invite-only gatherings with premium service, custom décor, and flawless execution.",
       tag: null
@@ -123,7 +136,12 @@ function Home() {
   return (
     <main className="home">
       {/* HERO */}
-      <section className="hero">
+      <section
+        className="hero"
+        style={{ backgroundImage: `url(${s14})` }}
+      >
+        {/* Dark overlay so text stays readable over the bg image */}
+        <div className="hero-bg-overlay" aria-hidden="true"></div>
         <div className="hero-bg-grid" aria-hidden="true"></div>
         <div className="hero-accent-ring" aria-hidden="true"></div>
 
@@ -212,16 +230,18 @@ function Home() {
                 <span className="service-tag">{service.tag}</span>
               )}
 
-              <div className="service-icon-wrap">
-                <span className="service-emoji">{service.icon}</span>
+              <div className="service-card-image">
+                <img src={service.image} alt={service.title} />
               </div>
 
-              <h3>{service.title}</h3>
-              <p>{service.desc}</p>
+              <div className="service-card-body">
+                <h3>{service.title}</h3>
+                <p>{service.desc}</p>
 
-              <button className="card-link" onClick={goTo404}>
-                Explore <span>→</span>
-              </button>
+                <button className="card-link" onClick={goTo404}>
+                  Explore <span>→</span>
+                </button>
+              </div>
             </div>
           ))}
         </div>

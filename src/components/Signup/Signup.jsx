@@ -1,8 +1,7 @@
+import { useState } from "react";
+import { FaGoogle, FaLinkedinIn, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  FaGoogle,
-  FaLinkedinIn
-} from "react-icons/fa";
+
 import { HiArrowLeft } from "react-icons/hi";
 
 import "./Signup.css";
@@ -10,24 +9,58 @@ import "./Signup.css";
 function Signup() {
   const navigate = useNavigate();
 
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState(false);
+
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] =
+    useState("");
+
+  const handleUsernameChange = (e) => {
+    const value = e.target.value.replace(/[^a-zA-Z]/g, "");
+    setUsername(value);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Backend Logic Later
+    const gmailRegex =
+      /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+
+    if (!gmailRegex.test(email)) {
+      alert("Only Gmail addresses are allowed.");
+      return;
+    }
+
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+    if (!passwordRegex.test(password)) {
+      alert(
+        "Password must contain at least 8 characters, one uppercase letter, one number and one special character."
+      );
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
     navigate("/dashboard");
   };
 
   return (
     <div className="signup-page">
-
       {/* LEFT */}
-
       <div className="signup-banner">
-
         <div className="banner-overlay"></div>
 
         <div className="banner-content">
-
           <span>EVENT MANAGEMENT SYSTEM</span>
 
           <h1>
@@ -41,24 +74,16 @@ function Signup() {
             events, bookings, venues and attendees
             from one modern platform.
           </p>
-
         </div>
-
       </div>
 
       {/* RIGHT */}
-
       <div className="signup-container">
-
         <form
           className="signup-card"
           onSubmit={handleSubmit}
         >
-
-          <Link
-            to="/"
-            className="back-home"
-          >
+          <Link to="/" className="back-home">
             <HiArrowLeft />
             Back to Home
           </Link>
@@ -70,7 +95,6 @@ function Signup() {
           </p>
 
           <div className="row">
-
             <div className="input-group">
               <label>Full Name</label>
 
@@ -86,11 +110,12 @@ function Signup() {
 
               <input
                 type="text"
-                placeholder="john123"
+                placeholder="john"
+                value={username}
+                onChange={handleUsernameChange}
                 required
               />
             </div>
-
           </div>
 
           <div className="input-group">
@@ -99,6 +124,12 @@ function Signup() {
             <input
               type="email"
               placeholder="john@gmail.com"
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
+              pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+              title="Only Gmail addresses are allowed"
               required
             />
           </div>
@@ -114,27 +145,79 @@ function Signup() {
           </div>
 
           <div className="row">
-
             <div className="input-group">
               <label>Password</label>
 
-              <input
-                type="password"
-                placeholder="Create Password"
-                required
-              />
+              <div className="password-wrapper">
+                <input
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
+                  placeholder="Create Password"
+                  value={password}
+                  onChange={(e) =>
+                    setPassword(
+                      e.target.value
+                    )
+                  }
+                  required
+                />
+
+                <span
+                  className="password-toggle"
+                  onClick={() =>
+                    setShowPassword(
+                      !showPassword
+                    )
+                  }
+                >
+                  {showPassword ? (
+                    <FaEyeSlash />
+                  ) : (
+                    <FaEye />
+                  )}
+                </span>
+              </div>
             </div>
 
             <div className="input-group">
               <label>Confirm Password</label>
 
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                required
-              />
-            </div>
+              <div className="password-wrapper">
+                <input
+                  type={
+                    showConfirmPassword
+                      ? "text"
+                      : "password"
+                  }
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) =>
+                    setConfirmPassword(
+                      e.target.value
+                    )
+                  }
+                  required
+                />
 
+                <span
+                  className="password-toggle"
+                  onClick={() =>
+                    setShowConfirmPassword(
+                      !showConfirmPassword
+                    )
+                  }
+                >
+                  {showConfirmPassword ? (
+                    <FaEyeSlash />
+                  ) : (
+                    <FaEye />
+                  )}
+                </span>
+              </div>
+            </div>
           </div>
 
           <div className="password-info">
@@ -144,7 +227,6 @@ function Signup() {
           </div>
 
           <div className="terms">
-
             <input
               type="checkbox"
               required
@@ -154,7 +236,6 @@ function Signup() {
               I agree to the Terms &
               Conditions and Privacy Policy
             </span>
-
           </div>
 
           <button
@@ -185,19 +266,14 @@ function Signup() {
           </button>
 
           <p className="login-link">
-
             Already have an account?
 
             <Link to="/login">
               Login
             </Link>
-
           </p>
-
         </form>
-
       </div>
-
     </div>
   );
 }

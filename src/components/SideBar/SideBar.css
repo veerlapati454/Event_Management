@@ -84,7 +84,7 @@
 
 /* ── LOGO ────────────────────────────────────────── */
 .sidebar-logo {
-  padding: 24px 20px 22px;   /* ← was 22px 20px 18px */
+  padding: 24px 20px 22px;
   border-bottom: 1px solid var(--navy-border);
   display: flex;
   align-items: center;
@@ -93,9 +93,25 @@
 
 .sidebar-logo img {
   height: 80px;
-  width: 200px;        /* ← controls wide logos better */
+  width: 200px;
   object-fit: contain;
 }
+
+/* ── ROLE BADGE ──────────────────────────────────── */
+.sidebar-role-badge {
+  display: inline-block;
+  margin: 12px 20px 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--electric);
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  border-radius: var(--radius-pill);
+  padding: 3px 12px;
+}
+
 /* ── SECTION LABEL ───────────────────────────────── */
 .sidebar-section-label {
   display: block;
@@ -122,43 +138,53 @@
 
 .sidebar-menu::-webkit-scrollbar { display: none; }
 
-/* NAV ITEM */
-.sidebar-menu li a {
+/* ── NAV ITEM — shared styles for both <a> and <button> ── */
+.sidebar-menu li a,
+.sidebar-menu li button {
   display: flex;
   align-items: center;
   gap: 12px;
+  width: 100%;
   padding: 10px 12px;
   border-radius: var(--radius-md);
   text-decoration: none;
   color: var(--text-muted);
   font-size: 13.5px;
   font-weight: 600;
+  font-family: var(--font);
   letter-spacing: 0.01em;
+  /* Strip browser button defaults */
+  background: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
   transition:
     background var(--tr),
     color var(--tr),
     border-color var(--tr);
-  border: 1px solid transparent;
-  position: relative;
-  overflow: hidden;
 }
 
-/* Hover */
-.sidebar-menu li:not(.active) a:hover {
+/* Hover — inactive items */
+.sidebar-menu li:not(.active) a:hover,
+.sidebar-menu li:not(.active) button:hover {
   background: rgba(255, 255, 255, 0.04);
   color: var(--text-secondary);
   border-color: var(--navy-border);
 }
 
-/* Active */
-.sidebar-menu li.active a {
+/* Active state */
+.sidebar-menu li.active a,
+.sidebar-menu li.active button {
   background: var(--violet-dim);
   color: var(--violet-light);
   border-color: var(--violet-border);
 }
 
 /* Shine sweep on active */
-.sidebar-menu li.active a::before {
+.sidebar-menu li.active a::before,
+.sidebar-menu li.active button::before {
   content: '';
   position: absolute;
   top: 0; left: -110%;

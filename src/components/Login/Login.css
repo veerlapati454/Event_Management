@@ -546,6 +546,31 @@
 .signup-btn:active {
   transform: scale(0.99);
 }
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 45px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #777;
+  display: flex;
+  align-items: center;
+}
+
+.password-toggle:hover {
+  color: #111;
+}
 
 /* ── RESPONSIVE ─────────────────────────────────── */
 @media (max-width: 900px) {
