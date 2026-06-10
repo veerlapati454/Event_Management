@@ -640,6 +640,14 @@
   color: #111;
 }
 
+.error-message {
+  display: block;
+  margin-top: 6px;
+  color: #ff4d4f;
+  font-size: 13px;
+  font-weight: 500;
+}
+
 @media (max-width: 480px) {
   .signup-banner {
     min-height: 180px;

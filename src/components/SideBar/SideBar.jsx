@@ -1,85 +1,103 @@
-import "./Sidebar.css";
-import { Link, useLocation } from "react-router-dom";
+import {  Link } from "react-router-dom";
 import logo from "../../assets/stackly_logo.webp";
+import "./SideBar.css";
 
-function Sidebar() {
-  const location = useLocation();
-
+function Sidebar({ isOpen, onClose }) {
   const role = localStorage.getItem("role") || "user";
-  const base = role === "admin" ? "/admin-dashboard" : "/dashboard";
+  
 
   const navItems = [
-    { path: "",          icon: "📊", label: "Dashboard"  },
-    { path: "/events",   icon: "📅", label: "My Events"  },
-    { path: "/bookings", icon: "🎫", label: "Bookings"   },
-    { path: "/venues",   icon: "🏛️", label: "Venues"     },
-    { path: "/tickets",  icon: "🎟️", label: "Tickets"    },
-    { path: "/messages", icon: "💬", label: "Messages"   },
-    { path: "/reviews",  icon: "⭐", label: "Reviews"    },
-    { path: "/settings", icon: "⚙️", label: "Settings"   },
+    { icon: "📊", label: "Dashboard" },
+    { icon: "📅", label: "My Events" },
+    { icon: "🎫", label: "Bookings" },
+    { icon: "🏛️", label: "Venues" },
+    { icon: "🎟️", label: "Tickets" },
+    { icon: "💬", label: "Messages" },
+    { icon: "⭐", label: "Reviews" },
+    { icon: "⚙️", label: "Settings" },
   ];
 
   return (
-    <aside className="sidebar">
-      {/* LOGO */}
-      <div className="sidebar-logo">
-        <img src={logo} alt="Stackly" />
-      </div>
+    <>
+      <aside className={`sidebar ${isOpen ? "open" : ""}`}>
+        <button
+          className="sidebar-close-btn"
+          onClick={onClose}
+          aria-label="Close menu"
+        >
+          ✕
+        </button>
 
-      {/* ROLE BADGE */}
-      {role === "admin" && (
-        <span className="sidebar-role-badge">Admin</span>
-      )}
-
-      {/* NAV LABEL */}
-      <span className="sidebar-section-label">Main Menu</span>
-
-      {/* NAV ITEMS — buttons only, no navigation */}
-      <ul className="sidebar-menu">
-        {navItems.map((item) => {
-          const to = `${base}${item.path}`;
-          const isActive = location.pathname === to;
-
-          return (
-            <li key={item.label} className={isActive ? "active" : ""}>
-              <button type="button">
-                <span className="nav-icon">{item.icon}</span>
-                <span className="nav-label">{item.label}</span>
-                {isActive && <span className="active-indicator" />}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-
-      {/* BOTTOM */}
-      <div className="sidebar-bottom">
-        {/* USER CARD */}
-        <div className="sidebar-user">
-          <div className="user-avatar">
-            {role === "admin" ? "A" : "U"}
-          </div>
-          <div className="user-info">
-            <span className="user-name">
-              {role === "admin" ? "Admin User" : "User Account"}
-            </span>
-            <span className="user-role">
-              {role === "admin" ? "Administrator" : "Standard User"}
-            </span>
-          </div>
+        <div className="sidebar-logo">
+          <img src={logo} alt="Stackly" />
         </div>
 
-        {/* LOGOUT */}
-        <Link
-          to="/login"
-          className="sidebar-logout"
-          onClick={() => localStorage.removeItem("role")}
-        >
-          <span>🚪</span>
-          <span>Logout</span>
-        </Link>
-      </div>
-    </aside>
+        {role === "admin" && (
+          <span className="sidebar-role-badge">Admin</span>
+        )}
+
+        <span className="sidebar-section-label">
+          Main Menu
+        </span>
+
+        <ul className="sidebar-menu">
+  {navItems.map((item) => (
+    <li key={item.label}>
+      <button
+        type="button"
+        className="sidebar-menu-btn"
+        onClick={onClose}
+      >
+        <span className="nav-icon">{item.icon}</span>
+        <span className="nav-label">{item.label}</span>
+      </button>
+    </li>
+  ))}
+</ul>
+
+        <div className="sidebar-bottom">
+          <div className="sidebar-user">
+            <div className="user-avatar">
+              {role === "admin" ? "A" : "U"}
+            </div>
+
+            <div className="user-info">
+              <span className="user-name">
+                {role === "admin"
+                  ? "Admin User"
+                  : "User Account"}
+              </span>
+
+              <span className="user-role">
+                {role === "admin"
+                  ? "Administrator"
+                  : "Standard User"}
+              </span>
+            </div>
+          </div>
+
+          <Link
+            to="/login"
+            className="sidebar-logout"
+            onClick={() => {
+              localStorage.removeItem("role");
+              onClose();
+            }}
+          >
+            <span>🚪</span>
+            <span>Logout</span>
+          </Link>
+        </div>
+      </aside>
+
+      <div
+        className={`sidebar-overlay ${
+          isOpen ? "active" : ""
+        }`}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+    </>
   );
 }
 

@@ -572,6 +572,14 @@
   color: #111;
 }
 
+.error-message {
+  display: block;
+  margin-top: 6px;
+  color: #ff4d4f;
+  font-size: 13px;
+  font-weight: 500;
+}
+
 /* ── RESPONSIVE ─────────────────────────────────── */
 @media (max-width: 900px) {
   .login-page {

@@ -9,16 +9,34 @@ function Login() {
 
   const [role, setRole] = useState("user");
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+
+    if (!value) {
+      setEmailError("");
+      return;
+    }
+
+    const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+
+    if (!gmailRegex.test(value)) {
+      setEmailError("Only Gmail addresses are allowed");
+    } else {
+      setEmailError("");
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Gmail validation
     const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
     if (!gmailRegex.test(email)) {
-      alert("Please enter a valid Gmail address.");
+      setEmailError("Only Gmail addresses are allowed");
       return;
     }
 
@@ -100,11 +118,15 @@ function Login() {
               type="email"
               placeholder="Enter Gmail Address"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
-              title="Only Gmail addresses are allowed"
+              onChange={handleEmailChange}
               required
             />
+
+            {emailError && (
+              <span className="error-message">
+                {emailError}
+              </span>
+            )}
           </div>
 
           {/* Password */}

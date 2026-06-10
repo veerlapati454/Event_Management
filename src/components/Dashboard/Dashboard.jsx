@@ -1,13 +1,37 @@
-import Sidebar from "../Sidebar/Sidebar";
+import { useState, useEffect } from "react";
+import Sidebar from "../SideBar/SideBar";
 import "./Dashboard.css";
 
 function UserDashboard() {
-  return (
-    <div className="dashboard-layout">
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-      <Sidebar />
+  useEffect(() => {
+    if (window.innerWidth <= 900 && sidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [sidebarOpen]);
+
+  return (
+    /* CHANGED: Dynamic class added here to handle responsive layouts */
+    <div className={`dashboard-layout ${sidebarOpen ? "sidebar-open" : ""}`}>
+
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <main className="dashboard-content">
+
+        {/* MOBILE TOPBAR */}
+        <div className="mobile-topbar">
+          <button className="hamburger-btn" onClick={() => setSidebarOpen(true)} aria-label="Open menu">
+            ☰
+          </button>
+          <span className="mobile-topbar-title">Dashboard</span>
+        </div>
 
         {/* WELCOME BANNER */}
         <div className="welcome-banner">

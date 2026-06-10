@@ -1,13 +1,33 @@
-import Sidebar from "../Sidebar/Sidebar";
+import { useState, useEffect } from "react";
+import Sidebar from "../SideBar/SideBar";
 import "./AdminDashboard.css";
 
 function AdminDashboard() {
-  return (
-    <div className="admin-layout">
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-      <Sidebar />
+  useEffect(() => {
+    if (window.innerWidth <= 900 && sidebarOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [sidebarOpen]);
+
+  return (
+    <div className={`admin-layout ${sidebarOpen ? "sidebar-open" : ""}`}>
+
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <main className="admin-content">
+
+        {/* MOBILE TOPBAR */}
+        <div className="mobile-topbar">
+          <button className="hamburger-btn" onClick={() => setSidebarOpen(true)} aria-label="Open menu">
+            ☰
+          </button>
+          <span className="mobile-topbar-title">Admin Panel</span>
+        </div>
 
         {/* WELCOME BANNER */}
         <div className="admin-banner">
@@ -21,19 +41,18 @@ function AdminDashboard() {
           </div>
           <div className="admin-banner-actions">
             <button className="btn-secondary">Export Report</button>
-            <button className="btn-primary">+ Add Event</button>
           </div>
         </div>
 
         {/* STATS */}
         <div className="admin-stats">
           {[
-            { icon: "👥", value: "12,458", label: "Total Users",   badge: "+124 this week", type: "up"      },
-            { icon: "📅", value: "248",    label: "Total Events",  badge: "+12 new",        type: "up"      },
-            { icon: "🎫", value: "5,821",  label: "Bookings",      badge: "+340 this month",type: "up"      },
-            { icon: "💰", value: "₹18.6L", label: "Revenue",       badge: "+8.2% growth",   type: "up"      },
-            { icon: "🏛️", value: "34",     label: "Venues",        badge: "3 pending",      type: "neutral" },
-            { icon: "⭐", value: "4.8",    label: "Avg Rating",    badge: "1,240 reviews",  type: "info"    },
+            { icon: "👥", value: "12,458", label: "Total Users",  badge: "+124 this week",  type: "up"      },
+            { icon: "📅", value: "248",    label: "Total Events", badge: "+12 new",          type: "up"      },
+            { icon: "🎫", value: "5,821",  label: "Bookings",     badge: "+340 this month",  type: "up"      },
+            { icon: "💰", value: "₹18.6L", label: "Revenue",      badge: "+8.2% growth",    type: "up"      },
+            { icon: "🏛️", value: "34",     label: "Venues",       badge: "3 pending",        type: "neutral" },
+            { icon: "⭐", value: "4.8",    label: "Avg Rating",   badge: "1,240 reviews",    type: "info"    },
           ].map((s, i) => (
             <div className="admin-stat-card" key={i}>
               <div className="stat-icon">{s.icon}</div>
@@ -46,66 +65,9 @@ function AdminDashboard() {
           ))}
         </div>
 
-        {/* ROW 1 — Revenue + Notifications */}
-        <div className="admin-grid">
+        
 
-          {/* REVENUE CHART */}
-          <div className="admin-card">
-            <div className="card-header">
-              <h3>Revenue Overview</h3>
-              <div className="chart-tabs">
-                <button className="chart-tab active">6M</button>
-                <button className="chart-tab">1Y</button>
-                <button className="chart-tab">All</button>
-              </div>
-            </div>
-            <div className="chart-meta">
-              <span className="chart-total">₹18,60,000</span>
-              <span className="chart-growth up">↑ 8.2% vs last period</span>
-            </div>
-            <div className="revenue-chart">
-              {[
-                { h: "45%", month: "Jan", val: "₹2.4L" },
-                { h: "62%", month: "Feb", val: "₹3.1L" },
-                { h: "78%", month: "Mar", val: "₹3.8L" },
-                { h: "58%", month: "Apr", val: "₹2.9L" },
-                { h: "92%", month: "May", val: "₹4.5L" },
-                { h: "85%", month: "Jun", val: "₹4.2L" },
-              ].map((b, i) => (
-                <div className="bar-wrap" key={i}>
-                  <span className="bar-val">{b.val}</span>
-                  <div className="bar" style={{ height: b.h }}></div>
-                  <span className="bar-month">{b.month}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* NOTIFICATIONS */}
-          <div className="admin-card">
-            <div className="card-header">
-              <h3>Recent Notifications</h3>
-              <span className="notif-count">4 new</span>
-            </div>
-            {[
-              { icon: "🔔", title: "New Event Submitted",   sub: "Tech Summit 2027 awaiting approval",  time: "5m ago",  type: "info"    },
-              { icon: "💳", title: "Payment Received",       sub: "₹3,200 from Rahul Sharma",            time: "18m ago", type: "success" },
-              { icon: "👤", title: "New User Registered",    sub: "sneha.reddy@gmail.com joined",        time: "1h ago",  type: "info"    },
-              { icon: "⭐", title: "New Review Added",        sub: "Music Festival — 5 stars",            time: "2h ago",  type: "info"    },
-              { icon: "⚠️", title: "Venue Report Flagged",   sub: "Open Arena — capacity issue",         time: "3h ago",  type: "alert"   },
-            ].map((n, i) => (
-              <div className="notif-row" key={i}>
-                <div className={`notif-icon type-${n.type}`}>{n.icon}</div>
-                <div className="notif-body">
-                  <span className="notif-title">{n.title}</span>
-                  <span className="notif-sub">{n.sub}</span>
-                </div>
-                <span className="notif-time">{n.time}</span>
-              </div>
-            ))}
-          </div>
-
-        </div>
+          
 
         {/* ROW 2 — Popular Events + Venue Performance */}
         <div className="admin-grid">
@@ -148,10 +110,10 @@ function AdminDashboard() {
               <a href="#" className="card-link">Manage →</a>
             </div>
             {[
-              { name: "Royal Palace Hall",  pct: 89, bookings: 142, status: "Active"      },
-              { name: "Convention Center",  pct: 76, bookings: 118, status: "Active"      },
-              { name: "Open Arena",         pct: 68, bookings: 96,  status: "Active"      },
-              { name: "City Center Hub",    pct: 54, bookings: 74,  status: "Maintenance" },
+              { name: "Royal Palace Hall", pct: 89, bookings: 142, status: "Active"      },
+              { name: "Convention Center", pct: 76, bookings: 118, status: "Active"      },
+              { name: "Open Arena",        pct: 68, bookings: 96,  status: "Active"      },
+              { name: "City Center Hub",   pct: 54, bookings: 74,  status: "Maintenance" },
             ].map((v, i) => (
               <div className="venue-block" key={i}>
                 <div className="venue-row">
@@ -201,11 +163,11 @@ function AdminDashboard() {
               </thead>
               <tbody>
                 {[
-                  { id: "BK-001", user: "Rahul Sharma",  event: "Tech Summit",      venue: "Convention Hall", date: "15 Jun 2026", amt: "₹3,200", status: "Confirmed", cls: "status-confirmed" },
-                  { id: "BK-002", user: "Sneha Reddy",   event: "Wedding Expo",     venue: "Royal Palace",    date: "22 Jun 2026", amt: "₹5,500", status: "Pending",   cls: "status-pending"   },
-                  { id: "BK-003", user: "Arjun Kumar",   event: "Music Festival",   venue: "Open Arena",      date: "30 Jun 2026", amt: "₹1,800", status: "Confirmed", cls: "status-confirmed" },
-                  { id: "BK-004", user: "Priya Singh",   event: "Business Meetup",  venue: "City Center",     date: "04 Jul 2026", amt: "₹800",   status: "Confirmed", cls: "status-confirmed" },
-                  { id: "BK-005", user: "Karan Mehta",   event: "Food Carnival",    venue: "City Square",     date: "10 Jul 2026", amt: "₹600",   status: "Cancelled", cls: "status-cancelled" },
+                  { id: "BK-001", user: "Rahul Sharma", event: "Tech Summit",     venue: "Convention Hall", date: "15 Jun 2026", amt: "₹3,200", status: "Confirmed", cls: "status-confirmed" },
+                  { id: "BK-002", user: "Sneha Reddy",  event: "Wedding Expo",    venue: "Royal Palace",    date: "22 Jun 2026", amt: "₹5,500", status: "Pending",   cls: "status-pending"   },
+                  { id: "BK-003", user: "Arjun Kumar",  event: "Music Festival",  venue: "Open Arena",      date: "30 Jun 2026", amt: "₹1,800", status: "Confirmed", cls: "status-confirmed" },
+                  { id: "BK-004", user: "Priya Singh",  event: "Business Meetup", venue: "City Center",     date: "04 Jul 2026", amt: "₹800",   status: "Confirmed", cls: "status-confirmed" },
+                  { id: "BK-005", user: "Karan Mehta",  event: "Food Carnival",   venue: "City Square",     date: "10 Jul 2026", amt: "₹600",   status: "Cancelled", cls: "status-cancelled" },
                 ].map((row, i) => (
                   <tr key={i}>
                     <td className="td-id">{row.id}</td>
@@ -228,7 +190,7 @@ function AdminDashboard() {
           </div>
         </div>
 
-        {/* ROW 4 — Quick Admin Actions + Top Users */}
+        {/* ROW 4 — Quick Actions + Top Users */}
         <div className="admin-grid bottom-grid">
 
           {/* QUICK ACTIONS */}
@@ -236,12 +198,12 @@ function AdminDashboard() {
             <div className="card-header"><h3>Quick Actions</h3></div>
             <div className="quick-actions-grid">
               {[
-                { icon: "➕", label: "Add Event"      },
-                { icon: "🏛️", label: "Add Venue"      },
-                { icon: "👤", label: "Manage Users"   },
-                { icon: "📊", label: "Analytics"      },
-                { icon: "💬", label: "Broadcast Msg"  },
-                { icon: "⚙️", label: "Settings"       },
+                { icon: "➕", label: "Add Event"     },
+                { icon: "🏛️", label: "Add Venue"     },
+                { icon: "👤", label: "Manage Users"  },
+                { icon: "📊", label: "Analytics"     },
+                { icon: "💬", label: "Broadcast Msg" },
+                { icon: "⚙️", label: "Settings"      },
               ].map((a, i) => (
                 <button className="quick-action-btn" key={i}>
                   <span className="qa-icon">{a.icon}</span>
@@ -258,10 +220,10 @@ function AdminDashboard() {
               <a href="#" className="card-link">View All →</a>
             </div>
             {[
-              { name: "Rahul Sharma",  bookings: 12, spent: "₹24,400", avatar: "R" },
-              { name: "Sneha Reddy",   bookings: 9,  spent: "₹18,200", avatar: "S" },
-              { name: "Arjun Kumar",   bookings: 8,  spent: "₹15,800", avatar: "A" },
-              { name: "Priya Singh",   bookings: 6,  spent: "₹11,200", avatar: "P" },
+              { name: "Rahul Sharma", bookings: 12, spent: "₹24,400", avatar: "R" },
+              { name: "Sneha Reddy",  bookings: 9,  spent: "₹18,200", avatar: "S" },
+              { name: "Arjun Kumar",  bookings: 8,  spent: "₹15,800", avatar: "A" },
+              { name: "Priya Singh",  bookings: 6,  spent: "₹11,200", avatar: "P" },
             ].map((u, i) => (
               <div className="top-user-row" key={i}>
                 <div className="top-user-avatar">{u.avatar}</div>

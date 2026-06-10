@@ -45,12 +45,29 @@
 }
 
 /* ── RESET ───────────────────────────────────────── */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── ROOT OVERFLOW LOCK ──────────────────────────── */
+html {
+  overflow-x: hidden;
+  max-width: 100%;
+}
 
 body {
   font-family: var(--font);
   background: var(--navy-bg);
   color: var(--text-primary);
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+#root {
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 /* ── LAYOUT ──────────────────────────────────────── */
@@ -58,14 +75,18 @@ body {
   display: flex;
   min-height: 100vh;
   background: var(--navy-bg);
-  overflow: hidden;
+  /* No overflow: hidden here — it breaks sticky/position inside */
+  width: 100%;
+  max-width: 100vw;
 }
 
 /* ── MAIN CONTENT ────────────────────────────────── */
 .dashboard-content {
   flex: 1;
+  /* KEY FIX: min-width:0 lets flex child shrink below its content size */
   min-width: 0;
-  margin-left: 0;
+  max-width: 100%;
+  overflow-x: hidden;
   padding: 28px 32px;
   display: flex;
   flex-direction: column;
@@ -87,7 +108,48 @@ body {
   z-index: 0;
 }
 
-.dashboard-content > * { position: relative; z-index: 1; }
+.dashboard-content > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── MOBILE TOPBAR ───────────────────────────────── */
+.mobile-topbar {
+  display: none;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 0;
+}
+
+.hamburger-btn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background: var(--navy-card);
+  border: 1px solid var(--navy-border);
+  color: var(--text-primary);
+  font-size: 18px;
+  cursor: pointer;
+  transition: border-color var(--tr), color var(--tr);
+}
+
+.hamburger-btn:hover {
+  border-color: var(--violet-border);
+  color: var(--violet-light);
+}
+
+.mobile-topbar-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+@media (max-width: 900px) {
+  .mobile-topbar {
+    display: flex;
+  }
+}
 
 /* ─────────────────────────────────────────────────
    WELCOME BANNER
@@ -104,9 +166,10 @@ body {
   position: relative;
   overflow: hidden;
   animation: rise 0.6s var(--tr-spring) both;
+  /* Prevent banner itself from expanding the page */
+  max-width: 100%;
 }
 
-/* Glow accent top-right */
 .welcome-banner::before {
   content: '';
   position: absolute;
@@ -119,7 +182,6 @@ body {
   pointer-events: none;
 }
 
-/* Cyan accent bottom-left */
 .welcome-banner::after {
   content: '';
   position: absolute;
@@ -168,14 +230,18 @@ body {
   color: var(--text-primary);
   letter-spacing: -0.4px;
   margin-bottom: 6px;
-  white-space: nowrap;
+  /* FIXED: allow wrap so it doesn't push layout */
+  white-space: normal;
+  word-break: break-word;
 }
 
 .welcome-text p {
   font-size: 13.5px;
   color: var(--text-secondary);
   line-height: 1.6;
-  white-space: nowrap;
+  /* FIXED: allow wrap */
+  white-space: normal;
+  word-break: break-word;
 }
 
 .welcome-actions {
@@ -253,6 +319,7 @@ body {
   cursor: pointer;
   transition: border-color var(--tr), color var(--tr), background var(--tr);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .btn-ghost:hover {
@@ -287,6 +354,8 @@ body {
   overflow: hidden;
   transition: border-color var(--tr), transform var(--tr);
   animation: rise 0.6s var(--tr-spring) both;
+  /* FIXED: prevent card from exceeding grid cell */
+  min-width: 0;
 }
 
 .stat-card:nth-child(1) { animation-delay: 0.05s; }
@@ -331,10 +400,11 @@ body {
   text-transform: uppercase;
   color: var(--text-muted);
   margin-top: 4px;
-  white-space: nowrap;
+  /* FIXED: allow wrap inside narrow cards */
+  white-space: normal;
+  word-break: break-word;
 }
 
-/* Stat badges */
 .stat-badge {
   display: inline-block;
   font-size: 11px;
@@ -342,6 +412,9 @@ body {
   border-radius: var(--radius-sm);
   padding: 3px 9px;
   width: fit-content;
+  /* FIXED: wrap if needed */
+  white-space: normal;
+  word-break: break-word;
 }
 
 .stat-badge.up      { background: rgba(16,185,129,0.12); color: #34D399; border: 1px solid rgba(16,185,129,0.2); }
@@ -357,6 +430,9 @@ body {
   border-radius: var(--radius-lg);
   padding: 22px 24px;
   animation: rise 0.6s 0.25s var(--tr-spring) both;
+  /* FIXED: must have min-width:0 when inside a grid */
+  min-width: 0;
+  overflow: hidden;
 }
 
 .card-header {
@@ -364,6 +440,7 @@ body {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 18px;
+  gap: 8px;
 }
 
 .card-header h3 {
@@ -371,6 +448,7 @@ body {
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.2px;
+  white-space: nowrap;
 }
 
 .card-link {
@@ -381,6 +459,7 @@ body {
   letter-spacing: 0.02em;
   transition: color var(--tr);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .card-link:hover { color: var(--electric); }
@@ -407,7 +486,7 @@ body {
   justify-content: space-between;
   padding: 11px 0;
   border-bottom: 1px solid var(--navy-border);
-  gap: 12px;
+  gap: 8px;
 }
 
 .event-row:last-child { border-bottom: none; }
@@ -415,8 +494,9 @@ body {
 .event-row-left {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   min-width: 0;
+  flex: 1;
 }
 
 .event-date-block {
@@ -452,10 +532,11 @@ body {
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 4px;
+  /* FIXED: use ellipsis rather than nowrap that causes overflow */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 160px;
+  max-width: 100%;
 }
 
 .event-tag {
@@ -466,6 +547,7 @@ body {
   text-transform: uppercase;
   border-radius: var(--radius-sm);
   padding: 2px 7px;
+  white-space: nowrap;
 }
 
 .tag-violet { background: var(--violet-dim); color: var(--violet-light); border: 1px solid var(--violet-border); }
@@ -482,6 +564,7 @@ body {
   gap: 12px;
   padding: 10px 0;
   border-bottom: 1px solid var(--navy-border);
+  min-width: 0;
 }
 
 .activity-row:last-child { border-bottom: none; }
@@ -518,9 +601,11 @@ body {
 .activity-sub {
   font-size: 12px;
   color: var(--text-muted);
+  /* FIXED: ellipsis so it doesn't push layout wide */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .activity-time {
@@ -540,6 +625,8 @@ body {
   overflow-x: auto;
   border-radius: var(--radius-md);
   border: 1px solid var(--navy-border);
+  /* FIXED: ensure table-wrap never pushes past its card */
+  max-width: 100%;
 }
 
 table {
@@ -547,6 +634,8 @@ table {
   border-collapse: collapse;
   font-size: 13px;
   table-layout: fixed;
+  /* FIXED: table must not exceed its container */
+  max-width: 100%;
 }
 
 thead {
@@ -598,7 +687,6 @@ tbody td {
 .td-muted  { color: var(--text-muted) !important; font-size: 12px; }
 .td-amount { color: var(--violet-light) !important; font-weight: 600; }
 
-/* Status pills */
 .status-pill {
   display: inline-block;
   font-size: 11px;
@@ -638,6 +726,9 @@ tbody td {
   cursor: pointer;
   transition: border-color var(--tr), color var(--tr), background var(--tr), transform var(--tr);
   text-align: left;
+  /* FIXED: prevent button text from overflowing */
+  min-width: 0;
+  overflow: hidden;
 }
 
 .quick-action-btn:hover {
@@ -663,6 +754,7 @@ tbody td {
   gap: 12px;
   padding: 12px 0;
   border-bottom: 1px solid var(--navy-border);
+  min-width: 0;
 }
 
 .recommend-row:last-child { border-bottom: none; }
@@ -672,6 +764,7 @@ tbody td {
   flex-direction: column;
   gap: 3px;
   min-width: 0;
+  flex: 1;
 }
 
 .recommend-name {
@@ -681,11 +774,15 @@ tbody td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .recommend-venue {
   font-size: 12px;
   color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .recommend-right {
@@ -699,6 +796,7 @@ tbody td {
   font-size: 13px;
   font-weight: 700;
   color: var(--violet-light);
+  white-space: nowrap;
 }
 
 /* ── ANIMATION ───────────────────────────────────── */
@@ -708,10 +806,15 @@ tbody td {
 }
 
 /* ── RESPONSIVE ──────────────────────────────────── */
+
+/* 4-col → 2-col stats at medium widths */
 @media (max-width: 1100px) {
-  .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
+/* Tablet / small desktop */
 @media (max-width: 900px) {
   .dashboard-content {
     padding: 20px 16px;
@@ -727,11 +830,6 @@ tbody td {
     align-items: flex-start;
   }
 
-  .welcome-text h1,
-  .welcome-text p {
-    white-space: normal;
-  }
-
   .welcome-actions {
     width: 100%;
   }
@@ -743,11 +841,73 @@ tbody td {
   }
 }
 
-
-
+/* Mobile */
 @media (max-width: 600px) {
-  .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .quick-actions-grid { grid-template-columns: 1fr; }
+  .dashboard-content {
+    padding: 16px 12px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quick-actions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Shrink table text and padding so it fits without horizontal scroll */
+  thead th,
+  tbody td {
+    padding: 10px 8px;
+    font-size: 11px;
+  }
+
+  .status-pill {
+    padding: 3px 8px;
+    font-size: 10px;
+  }
+
+  /* Welcome actions stack vertically on very small screens */
+  .welcome-actions {
+    flex-direction: column;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Add at the top of Dashboard.css or in a media query */
+@media (max-width: 900px) {
+  body {
+    overflow-x: hidden;
+  }
+  
+  .dashboard-layout {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
+  /* Lock scroll when sidebar is open */
+  .dashboard-layout.sidebar-open {
+    overflow: hidden;
+  }
+}
+
+/* Or add a class that gets toggled */
+@media (max-width: 900px) {
+  body.sidebar-active {
+    overflow: hidden;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 400px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── REDUCED MOTION ──────────────────────────────── */

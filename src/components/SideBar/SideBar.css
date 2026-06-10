@@ -11,10 +11,13 @@
   --violet-dim:    rgba(124, 58, 237, 0.12);
   --violet-border: rgba(124, 58, 237, 0.28);
   --electric:      #06B6D4;
+  --electric-dim:  rgba(6, 182, 212, 0.1);
   --navy-bg:       #07080F;
   --navy-surface:  #0D0F1C;
   --navy-card:     #111427;
+  --navy-card-2:  #161930;
   --navy-border:   rgba(255, 255, 255, 0.06);
+  --navy-border-hover: rgba(255, 255, 255, 0.12);
   --text-primary:  #EEF0FF;
   --text-secondary:#8B8FA8;
   --text-muted:    #4B4F68;
@@ -41,7 +44,6 @@
   border-right: 1px solid var(--navy-border);
   display: flex;
   flex-direction: column;
-  padding: 0;
   font-family: var(--font);
   overflow: hidden;
   z-index: 100;
@@ -106,7 +108,7 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--electric);
-  background: rgba(6, 182, 212, 0.1);
+  background: var(--electric-dim);
   border: 1px solid rgba(6, 182, 212, 0.25);
   border-radius: var(--radius-pill);
   padding: 3px 12px;
@@ -138,7 +140,7 @@
 
 .sidebar-menu::-webkit-scrollbar { display: none; }
 
-/* ── NAV ITEM — shared styles for both <a> and <button> ── */
+/* ── NAV ITEM ──────────────────────────────────── */
 .sidebar-menu li a,
 .sidebar-menu li button {
   display: flex;
@@ -153,17 +155,13 @@
   font-weight: 600;
   font-family: var(--font);
   letter-spacing: 0.01em;
-  /* Strip browser button defaults */
   background: none;
   border: 1px solid transparent;
   cursor: pointer;
   text-align: left;
   position: relative;
   overflow: hidden;
-  transition:
-    background var(--tr),
-    color var(--tr),
-    border-color var(--tr);
+  transition: background var(--tr), color var(--tr), border-color var(--tr);
 }
 
 /* Hover — inactive items */
@@ -189,12 +187,7 @@
   position: absolute;
   top: 0; left: -110%;
   width: 100%; height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.07),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07), transparent);
   animation: nav-shine 4s 0.5s ease-in-out infinite;
 }
 
@@ -312,21 +305,97 @@
   border-color: rgba(239, 68, 68, 0.2);
 }
 
+/* ── MOBILE OVERLAY ───────────────────────────────── */
+.sidebar-overlay {
+  display: none;
+}
 
+/* ── MOBILE CLOSE BUTTON ─────────────────────────── */
+.sidebar-close-btn {
+  display: none;
+}
 
-/* ── RESPONSIVE ──────────────────────────────────── */
+.sidebar-menu-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  border-radius: 10px;
+}
+
+.sidebar-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── MOBILE RESPONSIVE ─────────────────────────────── */
 @media (max-width: 900px) {
+  /* Convert sidebar to fixed slide-in */
   .sidebar {
     position: fixed;
     top: 0;
     left: -100%;
+    width: 80%;
+    max-width: 300px;
     height: 100vh;
-    transition: left var(--tr);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 200;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
   }
 
+  /* Open state */
   .sidebar.open {
     left: 0;
+  }
+
+  /* Mobile close button */
+  .sidebar-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    color: var(--text-secondary);
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 201;
+  }
+
+  .sidebar-close-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--violet-border);
+  }
+
+  /* Mobile overlay */
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 199;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  /* Show overlay when sidebar is open */
+  .sidebar.open ~ .sidebar-overlay,
+  .sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
   }
 }
 

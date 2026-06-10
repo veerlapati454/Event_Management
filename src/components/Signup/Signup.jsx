@@ -15,6 +15,7 @@ function Signup() {
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [username, setUsername] = useState("");
 
   const [showPassword, setShowPassword] =
@@ -44,6 +45,28 @@ function Signup() {
     setUsername(value);
   };
 
+  // Gmail Validation
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+
+    if (!value.includes("@")) {
+      setEmailError("");
+      return;
+    }
+
+    if (
+      value.includes("@") &&
+      !value.toLowerCase().endsWith("@gmail.com")
+    ) {
+      setEmailError(
+        "Only Gmail addresses are allowed"
+      );
+    } else {
+      setEmailError("");
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -51,7 +74,9 @@ function Signup() {
       /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
     if (!gmailRegex.test(email)) {
-      alert("Only Gmail addresses are allowed.");
+      setEmailError(
+        "Only Gmail addresses are allowed"
+      );
       return;
     }
 
@@ -152,13 +177,15 @@ function Signup() {
               type="email"
               placeholder="john@gmail.com"
               value={email}
-              onChange={(e) =>
-                setEmail(e.target.value)
-              }
-              pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
-              title="Only Gmail addresses are allowed"
+              onChange={handleEmailChange}
               required
             />
+
+            {emailError && (
+              <span className="error-message">
+                {emailError}
+              </span>
+            )}
           </div>
 
           {/* Phone */}
@@ -265,8 +292,8 @@ function Signup() {
             />
 
             <span>
-              I agree to the Terms &
-              Conditions and Privacy Policy
+              I agree to the Terms & Conditions
+              and Privacy Policy
             </span>
           </div>
 
