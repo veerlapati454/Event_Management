@@ -1,7 +1,11 @@
 import { useState } from "react";
-import { FaGoogle, FaLinkedinIn, FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  FaGoogle,
+  FaLinkedinIn,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-
 import { HiArrowLeft } from "react-icons/hi";
 
 import "./Signup.css";
@@ -9,10 +13,12 @@ import "./Signup.css";
 function Signup() {
   const navigate = useNavigate();
 
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] =
+    useState(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState(false);
 
@@ -20,8 +26,21 @@ function Signup() {
   const [confirmPassword, setConfirmPassword] =
     useState("");
 
+  // Full Name - only alphabets and spaces
+  const handleFullNameChange = (e) => {
+    const value = e.target.value.replace(
+      /[^a-zA-Z\s]/g,
+      ""
+    );
+    setFullName(value);
+  };
+
+  // Username - only alphabets
   const handleUsernameChange = (e) => {
-    const value = e.target.value.replace(/[^a-zA-Z]/g, "");
+    const value = e.target.value.replace(
+      /[^a-zA-Z]/g,
+      ""
+    );
     setUsername(value);
   };
 
@@ -51,7 +70,8 @@ function Signup() {
       return;
     }
 
-    navigate("/dashboard");
+    alert("Account created successfully!");
+    navigate("/login");
   };
 
   return (
@@ -95,16 +115,21 @@ function Signup() {
           </p>
 
           <div className="row">
+            {/* Full Name */}
             <div className="input-group">
               <label>Full Name</label>
 
               <input
                 type="text"
                 placeholder="John Doe"
+                value={fullName}
+                onChange={handleFullNameChange}
+                title="Only alphabets and spaces are allowed"
                 required
               />
             </div>
 
+            {/* Username */}
             <div className="input-group">
               <label>Username</label>
 
@@ -113,11 +138,13 @@ function Signup() {
                 placeholder="john"
                 value={username}
                 onChange={handleUsernameChange}
+                title="Only alphabets are allowed"
                 required
               />
             </div>
           </div>
 
+          {/* Email */}
           <div className="input-group">
             <label>Email Address</label>
 
@@ -134,17 +161,21 @@ function Signup() {
             />
           </div>
 
+          {/* Phone */}
           <div className="input-group">
             <label>Phone Number</label>
 
             <input
               type="tel"
               placeholder="+91 9876543210"
+              pattern="[0-9]{10}"
+              title="Enter a valid 10-digit phone number"
               required
             />
           </div>
 
           <div className="row">
+            {/* Password */}
             <div className="input-group">
               <label>Password</label>
 
@@ -182,6 +213,7 @@ function Signup() {
               </div>
             </div>
 
+            {/* Confirm Password */}
             <div className="input-group">
               <label>Confirm Password</label>
 
@@ -221,8 +253,8 @@ function Signup() {
           </div>
 
           <div className="password-info">
-            Password must contain at least:
-            8 characters, one uppercase,
+            Password must contain at least 8
+            characters, one uppercase letter,
             one number and one special symbol.
           </div>
 

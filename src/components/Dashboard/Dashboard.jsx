@@ -16,7 +16,7 @@ function UserDashboard() {
               <span className="status-dot"></span>
               Dashboard
             </div>
-            <h1>Welcome Back, Alex 👋</h1>
+            <h1>Welcome Back 👋</h1>
             <p>Manage your events, bookings and tickets from a single dashboard.</p>
           </div>
           <div className="welcome-actions">

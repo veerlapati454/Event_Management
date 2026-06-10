@@ -343,32 +343,27 @@ function Home() {
           <div className="why-features">
             {[
               {
-                icon: "🎯",
+                
                 title: "Precision Planning",
                 desc: "Every detail tracked and owned."
               },
               {
-                icon: "🤝",
                 title: "Dedicated Manager",
                 desc: "One point of contact from start to finish."
               },
               {
-                icon: "🌐",
                 title: "Vendor Network",
                 desc: "300+ vetted vendors."
               },
               {
-                icon: "💡",
                 title: "Creative Direction",
                 desc: "Custom themes and branding."
               },
               {
-                icon: "📋",
                 title: "Transparent Pricing",
                 desc: "No hidden costs."
               },
               {
-                icon: "🛡️",
                 title: "Contingency Ready",
                 desc: "Always prepared with backup plans."
               }

@@ -492,7 +492,7 @@ img {
 
 .service-tag {
   position: absolute;
-  top: 16px;
+  top: 6px;
   right: 16px;
   font-size: 10px;
   font-weight: 700;
@@ -502,7 +502,7 @@ img {
   background: var(--violet-dim);
   border: 1px solid var(--violet-border);
   border-radius: 100px;
-  padding: 4px 12px;
+  padding: 4px 8px;
 }
 
 /* ── SERVICE CARD IMAGE ─────────────────────────── */
