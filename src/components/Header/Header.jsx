@@ -96,8 +96,7 @@ function Header() {
               {isActive(link.to) && (
                 <span className="nav-link-dot" aria-hidden="true" />
               )}
-            </Link>
-          ))}
+            </Link>          ))}
         </nav>
 
         {/* DESKTOP CTA */}

@@ -186,7 +186,7 @@ img {
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  background-attachment: fixed; /* parallax feel on desktop */
+  background-attachment: scroll; /* parallax feel on desktop */
 }
 
 /* ── HERO OVERLAY — sits above bg image, below all content ── */
